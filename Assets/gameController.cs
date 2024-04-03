@@ -7,17 +7,27 @@ public class gameController : MonoBehaviour
 {
     public void ResetGame()
     {
-        StartCoroutine(Check());
+        StartCoroutine(LoadThisLevel());
     }
 
     public void NextLevel()
     {
-        SceneManager.LoadScene("level2");
+        StartCoroutine(LoadNextLevel());
     }
 
-    IEnumerator Check()
+    IEnumerator LoadThisLevel()
     {
         yield return new WaitForSeconds(2f);
-        SceneManager.LoadScene(0);
+        int currentLevel = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(currentLevel);
+    }
+
+
+    IEnumerator LoadNextLevel()
+    {
+        yield return new WaitForSeconds(2f);
+        int nextlevl = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(nextlevl+1);
+        
     }
 }

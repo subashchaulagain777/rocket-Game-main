@@ -11,6 +11,7 @@ public class RocketShip : MonoBehaviour
     public AudioSource audioS;
     Rigidbody rb;
     gameController gc;
+    bool isAlive = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,8 +23,11 @@ public class RocketShip : MonoBehaviour
     void Update()
     {
 
-
-        Movement();
+        if(isAlive)
+        {
+            Movement();
+        }
+       
     }
 
 
@@ -82,12 +86,17 @@ public class RocketShip : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        
+         if(!isAlive)
+        {
+            return;
+        }
 
         if (collision.gameObject.CompareTag("landing"))
         {
-            Debug.Log("This is landing");
+           
             gc.NextLevel();
+           
+            isAlive = false;
 
         }
 
@@ -97,9 +106,8 @@ public class RocketShip : MonoBehaviour
         {
 
             gc.ResetGame();
-
-            this.enabled = false;
             audioS.Stop();
+            isAlive=false;
            
             
 
