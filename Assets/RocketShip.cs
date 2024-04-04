@@ -8,15 +8,20 @@ public class RocketShip : MonoBehaviour
 
     public float speed;
     public float rotatingSpeed;
-    public AudioSource audioS;
+     AudioSource audioS;
     Rigidbody rb;
     gameController gc;
     bool isAlive = true;
+
+    public AudioClip mainEngine;
+    public AudioClip DeathEngine;
+    public AudioClip SucessEngine;
     // Start is called before the first frame update
     void Start()
     {
         gc = FindObjectOfType<gameController>();
         rb = GetComponent<Rigidbody>();
+        audioS = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -47,7 +52,7 @@ public class RocketShip : MonoBehaviour
 
             if (audioS.isPlaying == false)
             {
-                audioS.Play();
+                audioS.PlayOneShot(mainEngine);
             }
             rb.AddRelativeForce(speed * Time.deltaTime * Vector3.up, ForceMode.Impulse);
 
@@ -95,7 +100,9 @@ public class RocketShip : MonoBehaviour
         {
            
             gc.NextLevel();
-           
+            AudioSource.PlayClipAtPoint(SucessEngine, Camera.main.transform.position);
+            audioS.Stop();
+
             isAlive = false;
 
         }
@@ -106,6 +113,7 @@ public class RocketShip : MonoBehaviour
         {
 
             gc.ResetGame();
+            AudioSource.PlayClipAtPoint(DeathEngine, Camera.main.transform.position);
             audioS.Stop();
             isAlive=false;
            
