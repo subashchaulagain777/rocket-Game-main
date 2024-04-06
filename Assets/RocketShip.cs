@@ -1,30 +1,65 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class RocketShip : MonoBehaviour
 {
 
+    [Header("Script")]
+
+    HealthBar healthBar;
+    gameController gc;
+
+
+    [Header("Value")]
+
     public float speed;
     public float rotatingSpeed;
+
+
+    public int MaxHealth = 100;
+    public int currentHealth;
+
+
+
+    [Space]
      AudioSource audioS;
     Rigidbody rb;
-    gameController gc;
+    
     bool isAlive = true;
 
+
+    [Header("Audio")]
     public AudioClip mainEngine;
     public AudioClip DeathEngine;
     public AudioClip SucessEngine;
 
+    [Space]
 
+
+    [Header("particle and GameObejct")]
     public ParticleSystem flames;
+    public GameObject explosion;
+
+
+   
+
+   
+
     // Start is called before the first frame update
     void Start()
     {
         gc = FindObjectOfType<gameController>();
         rb = GetComponent<Rigidbody>();
         audioS = GetComponent<AudioSource>();
+        healthBar = FindAnyObjectByType<HealthBar>();
+
+        healthBar.MaxHealth(MaxHealth);
+        currentHealth = MaxHealth;
+
+      
     }
 
     // Update is called once per frame
@@ -34,6 +69,7 @@ public class RocketShip : MonoBehaviour
         if(isAlive)
         {
             Movement();
+            explosion.SetActive(false);
         }
        
     }
@@ -64,12 +100,17 @@ public class RocketShip : MonoBehaviour
         }
         else if(Input.GetKeyUp(KeyCode.Space))
         {
-            flames.Clear();
-            flames.Stop();
-            Debug.Log(flames);
+            FlamesStop();
+           // Debug.Log(flames);
             audioS.Stop();
             
         }
+    }
+
+    void FlamesStop()
+    {
+       // flames.Clear();
+        flames.Stop();
     }
 
     private void Rotation()
@@ -110,6 +151,8 @@ public class RocketShip : MonoBehaviour
            
             gc.NextLevel();
             AudioSource.PlayClipAtPoint(SucessEngine, Camera.main.transform.position);
+            FlamesStop();
+            
             audioS.Stop();
 
             isAlive = false;
@@ -121,10 +164,20 @@ public class RocketShip : MonoBehaviour
         if (collision.gameObject.CompareTag("obstacle"))
         {
 
-            gc.ResetGame();
-            AudioSource.PlayClipAtPoint(DeathEngine, Camera.main.transform.position);
-            audioS.Stop();
-            isAlive=false;
+            TakeDamage(15);
+
+            if(currentHealth<=0)
+            {
+                //PlayerHealth = 0;
+                gc.ResetGame();
+                AudioSource.PlayClipAtPoint(DeathEngine, Camera.main.transform.position);
+
+                FlamesStop();
+                explosion.SetActive(true);
+                audioS.Stop();
+                isAlive = false;
+            }
+           
            
             
 
@@ -136,10 +189,26 @@ public class RocketShip : MonoBehaviour
     {
         if(other.gameObject.CompareTag("fuel"))
         {
-            Debug.Log("this is fuel");
+            Debug.Log("fuel");
+            currentHealth += 40;
+            if(currentHealth>=100)
+            {
+                currentHealth = 100;
+            }
+            healthBar.SetHealth(currentHealth);
         }
     }
 
 
-    
+    private void TakeDamage( int damage)
+    {
+        currentHealth -= damage;
+        healthBar.SetHealth(currentHealth);
+       
+       
+        
+    }
+
+
+
 }

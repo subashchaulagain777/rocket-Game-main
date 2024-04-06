@@ -17,7 +17,7 @@ public class gameController : MonoBehaviour
 
     IEnumerator LoadThisLevel()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.7f);
         int currentLevel = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(currentLevel);
     }
