@@ -16,6 +16,9 @@ public class RocketShip : MonoBehaviour
     public AudioClip mainEngine;
     public AudioClip DeathEngine;
     public AudioClip SucessEngine;
+
+
+    public ParticleSystem flames;
     // Start is called before the first frame update
     void Start()
     {
@@ -54,12 +57,18 @@ public class RocketShip : MonoBehaviour
             {
                 audioS.PlayOneShot(mainEngine);
             }
+            flames.Play();
             rb.AddRelativeForce(speed * Time.deltaTime * Vector3.up, ForceMode.Impulse);
 
+        
         }
-        else
+        else if(Input.GetKeyUp(KeyCode.Space))
         {
+            flames.Clear();
+            flames.Stop();
+            Debug.Log(flames);
             audioS.Stop();
+            
         }
     }
 

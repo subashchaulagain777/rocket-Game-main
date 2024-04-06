@@ -368,6 +368,7 @@ MonoBehaviour:
   mainEngine: {fileID: 8300000, guid: 67e4cb0f1d90a41499ab5ad51cd5a8dd, type: 3}
   DeathEngine: {fileID: 8300000, guid: 5acf9ba4311b9224bbf075affbcda68c, type: 3}
   SucessEngine: {fileID: 8300000, guid: 383cf32aa50ca1e4abc1d0badb022182, type: 3}
+  flames: {fileID: 0}
 --- !u!64 &2891952901055368430
 MeshCollider:
   m_ObjectHideFlags: 0
